@@ -8,14 +8,6 @@ const (
 	STATUS_REJECTED  = "rejected"
 )
 
-type Application struct {
-	Id        string
-	Firstname string
-	Lastname  string
-	Status    string
-	JobId     string
-}
-
 func checkStatus(status string) error {
 	switch status {
 	case STATUS_PENDING, STATUS_COMPLETED, STATUS_REJECTED:
