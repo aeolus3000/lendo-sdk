@@ -1,5 +1,8 @@
 package dnb
 
+//These tests need the following container running:
+//docker run -p 8000:8000 lendoab/interview-service:stable
+
 import (
 	"github.com/aeolus3000/lendo-sdk/banking"
 	"github.com/google/uuid"
@@ -16,9 +19,6 @@ const (
 var (
 	dnb banking.BankingApi
 )
-
-//These tests need the following container running:
-//docker run -p 8000:8000 lendoab/interview-service:stable
 
 func TestMain(m *testing.M) {
 	setup()
