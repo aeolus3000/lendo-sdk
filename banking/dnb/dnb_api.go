@@ -14,10 +14,10 @@ import (
 
 type Dnb struct {
 	client *http.Client
-	config DnbConfiguration
+	config banking.Configuration
 }
 
-func NewDnbBanking(configuration DnbConfiguration) banking.BankingApi {
+func NewDnbBanking(configuration banking.Configuration) banking.BankingApi {
 	var netTransport = &http.Transport{
 		DialContext: (&net.Dialer{
 			Timeout: configuration.tcpConnectTimeout,

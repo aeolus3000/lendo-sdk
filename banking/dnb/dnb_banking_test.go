@@ -28,7 +28,7 @@ func TestMain(m *testing.M) {
 }
 
 func setup() {
-	dnb = NewDnbBanking(NewDnbDefaultConfiguration())
+	dnb = NewDnbBanking(banking.NewDnbDefaultConfiguration())
 }
 
 func shutdown() {

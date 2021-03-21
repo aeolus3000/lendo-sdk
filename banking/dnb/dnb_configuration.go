@@ -1,29 +1,21 @@
 package dnb
 
-import "time"
+import (
+	"github.com/aeolus3000/lendo-sdk/banking"
+	"time"
+)
 
-type DnbConfiguration struct {
-	requestTimeout           time.Duration
-	tcpConnectTimeout        time.Duration
-	tlsHandshakeTimeout      time.Duration
-	host                     string
-	port                     string
-	createSlug               string
-	checkStatusSlug          string
-	checkStatusParameterName string
-	contentType              string
-}
-
-func NewDnbDefaultConfiguration() DnbConfiguration {
-	return DnbConfiguration{
-		requestTimeout:           5 * time.Second,
-		tcpConnectTimeout:        5 * time.Second,
-		tlsHandshakeTimeout:      5 * time.Second,
-		host:                     "localhost",
-		port:                     "8000",
-		createSlug:               "api/applications",
-		checkStatusSlug:          "api/jobs",
-		checkStatusParameterName: "application_id",
-		contentType:              "application/json",
+func NewDnbDefaultConfiguration() banking.Configuration {
+	return banking.Configuration{
+		RequestTimeout:           5 * time.Second,
+		TcpConnectTimeout:        5 * time.Second,
+		TlsHandshakeTimeout:      5 * time.Second,
+		Host:                     "localhost",
+		Port:                     "8000",
+		CreateSlug:               "api/applications",
+		CheckStatusSlug:          "api/jobs",
+		CheckStatusParameterName: "application_id",
+		ContentType:              "application/json",
 	}
 }
+
