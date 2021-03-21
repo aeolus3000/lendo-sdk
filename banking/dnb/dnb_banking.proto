@@ -1,0 +1,23 @@
+syntax = "proto3";
+package banking;
+
+option go_package = "/banking/dnb";
+
+message DnbApplicationsRequest {
+  string id = 1;
+  string first_name = 2;
+  string last_name = 3;
+}
+
+message DnbApplicationsResponse {
+  string id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string status = 4;
+}
+
+message DnbJobsResponse {
+  string id = 1;
+  string application_id = 2;
+  string status = 4;
+}
