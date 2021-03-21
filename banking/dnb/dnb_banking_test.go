@@ -42,8 +42,8 @@ func TestCreateApplicationValid(t *testing.T) {
 	expectedStatus := "pending"
 	application := banking.Application{
 		Id:        uuid.NewString(),
-		Firstname: "Simon",
-		Lastname:  "Kopp",
+		FirstName: "Simon",
+		LastName:  "Kopp",
 	}
 	applicationStatus, err := dnb.Create(application)
 	if err != nil {
@@ -64,8 +64,8 @@ func TestCreateApplicationInValidUuid(t *testing.T) {
 	expectedError := "duplicate application Id: {\"error\":\"the request payload is not valid.\"}"
 	application := banking.Application{
 		Id:        "invalid-uuid",
-		Firstname: "Simon",
-		Lastname:  "Kopp",
+		FirstName: "Simon",
+		LastName:  "Kopp",
 	}
 	_, err := dnb.Create(application)
 	if err == nil {
@@ -83,8 +83,8 @@ func TestCreateApplicationDuplicateUuid(t *testing.T) {
 	expectedError := "duplicate application Id: {\"error\":\"the application ID is already used\"}"
 	application := banking.Application{
 		Id:        uuid.NewString(),
-		Firstname: "Simon",
-		Lastname:  "Kopp",
+		FirstName: "Simon",
+		LastName:  "Kopp",
 	}
 	_, _ = dnb.Create(application)
 	// create a second time to see duplicate error
@@ -104,8 +104,8 @@ func TestCheckStatusValidUuid(t *testing.T) {
 	expectedStatus := "completedrejected"
 	application := banking.Application{
 		Id:        uuid.NewString(),
-		Firstname: "Simon",
-		Lastname:  "Kopp",
+		FirstName: "Simon",
+		LastName:  "Kopp",
 	}
 	_, _ = dnb.Create(application)
 	time.Sleep(maxProcessingTime)
