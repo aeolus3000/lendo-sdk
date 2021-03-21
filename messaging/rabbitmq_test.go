@@ -1,3 +1,6 @@
+//This test need the following docker container running
+//run -d --hostname my-rabbit6 --name some-rabbit6 --network host rabbitmq:3.8.14-management
+
 package messaging
 
 import (
@@ -49,6 +52,8 @@ func setup() {
 		sub: subscriber,
 	}
 
+	rabbitMqConnectTime := 2 * time.Second
+	time.Sleep(rabbitMqConnectTime)
 }
 
 func shutdown() {
@@ -65,11 +70,9 @@ func TestRabbitMq(t *testing.T) {
 	//When publishing expected string
 	buffer := bytes.Buffer{}
 	buffer.Write([]byte(expectedString))
-	for {
-		err := testPubSub.pub.Publish(buffer)
-		if err == nil {
-			break
-		}
+	err := testPubSub.pub.Publish(buffer)
+	if err != nil {
+		t.Errorf("Could not publish to rabbitmq; error: %v", err)
 	}
 	//And subscribing on the same channel
 	msgs, _ := testPubSub.sub.Consume()
@@ -94,4 +97,5 @@ func TestRabbitMq(t *testing.T) {
 	select {
 	case <-time.After(5 * time.Second):
 	}
+
 }
