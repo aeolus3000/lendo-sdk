@@ -2,7 +2,7 @@ package application
 
 type BootstrapApplication struct {
 	application Application
-	name string
+	name        string
 }
 
 func NewBootstrapApplication(application Application, name string) BootstrapApplication {

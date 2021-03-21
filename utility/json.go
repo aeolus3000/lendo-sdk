@@ -7,7 +7,7 @@ import (
 
 func MarshalToJson(message proto.Message) ([]byte, error) {
 	options := protojson.MarshalOptions{
-		UseProtoNames:     true,
+		UseProtoNames: true,
 	}
 	return options.Marshal(message)
 }

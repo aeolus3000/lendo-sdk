@@ -3,9 +3,9 @@ package banking
 import "fmt"
 
 const (
-	STATUS_PENDING = "pending"
+	STATUS_PENDING   = "pending"
 	STATUS_COMPLETED = "completed"
-	STATUS_REJECTED = "rejected"
+	STATUS_REJECTED  = "rejected"
 )
 
 type Application struct {
@@ -13,7 +13,7 @@ type Application struct {
 	Firstname string
 	Lastname  string
 	Status    string
-	JobId	  string
+	JobId     string
 }
 
 func checkStatus(status string) error {

@@ -15,15 +15,15 @@ func Test_checkStatus(t *testing.T) {
 			"pending",
 			args{status: "pending"},
 			false,
-		},{
+		}, {
 			"completed",
 			args{status: "completed"},
 			false,
-		},{
+		}, {
 			"rejected",
 			args{status: "rejected"},
 			false,
-		},{
+		}, {
 			"something else",
 			args{status: "something else"},
 			true,

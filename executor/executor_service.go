@@ -9,7 +9,7 @@ import (
 )
 
 type ExecutorService struct {
-	wg *sync.WaitGroup
+	wg      *sync.WaitGroup
 	jobChan chan Job
 }
 

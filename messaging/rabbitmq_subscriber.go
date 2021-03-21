@@ -38,12 +38,12 @@ func (mq *rabbitmqSubscriber) Consume() (<-chan Message, error) {
 	}
 	sourceMsgs, err := mq.channel.Consume(
 		mq.configuration.QueueName, // queue
-		consumerName(1),     // consumer
-		false,  // auto-ack
-		false,  // exclusive
-		false,  // no-local
-		false,  // no-wait
-		nil,    // args
+		consumerName(1),            // consumer
+		false,                      // auto-ack
+		false,                      // exclusive
+		false,                      // no-local
+		false,                      // no-wait
+		nil,                        // args
 	)
 	if err != nil {
 		return nil, err
@@ -64,10 +64,10 @@ func forwardMessages(source <-chan amqp.Delivery, destination chan Message) {
 			continue
 		}
 		message := Message{
-			Body:       buffer ,
-			Acknowledge: acknowledgeMessage(d),
+			Body:           buffer,
+			Acknowledge:    acknowledgeMessage(d),
 			NotAcknowledge: notAcknowledgeMessage(d),
-			Reject: rejectMessage(d),
+			Reject:         rejectMessage(d),
 		}
 		destination <- message
 	}

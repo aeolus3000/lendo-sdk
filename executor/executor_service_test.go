@@ -42,18 +42,18 @@ func TestNewExecutorService(t *testing.T) {
 		jobDuration time.Duration
 	}
 	tests := []struct {
-		name string
-		args args
+		name     string
+		args     args
 		expected uint64
 	}{
 		{"Working fine",
-		args{
-			workers:     4,
-			queueLength: 4,
-			jobs:        4,
-			jobDuration: 2 * time.Second,
-		},
-		4},
+			args{
+				workers:     4,
+				queueLength: 4,
+				jobs:        4,
+				jobDuration: 2 * time.Second,
+			},
+			4},
 		{"Not enough time",
 			args{
 				workers:     4,
@@ -104,7 +104,7 @@ func scheduleJobs(es *ExecutorService, counter *Counter, jobs uint64, jobDuratio
 	for i = 0; i < jobs; i++ {
 		tj := TestJob{
 			WaitTime: jobDuration,
-			Counter: counter,
+			Counter:  counter,
 		}
 		es.queueJob(&tj)
 	}

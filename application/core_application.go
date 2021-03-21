@@ -4,8 +4,8 @@ import "lendo-sdk/configuration"
 
 type CoreApplication struct {
 	configuration configuration.Configuration
-	name string
-	args []string
+	name          string
+	args          []string
 }
 
 func NewCoreApplication(name string, args []string) CoreApplication {

@@ -17,7 +17,7 @@ import (
 
 var (
 	testPubSub = TestPubSub{}
-	config = RabbitMqConfiguration{
+	config     = RabbitMqConfiguration{
 		User:        "guest",
 		Password:    "guest",
 		Host:        "localhost",

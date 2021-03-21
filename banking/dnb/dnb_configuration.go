@@ -3,15 +3,15 @@ package dnb
 import "time"
 
 type DnbConfiguration struct {
-	requestTimeout time.Duration
-	tcpConnectTimeout time.Duration
-	tlsHandshakeTimeout time.Duration
-	host string
-	port string
-	createSlug string
-	checkStatusSlug string
+	requestTimeout           time.Duration
+	tcpConnectTimeout        time.Duration
+	tlsHandshakeTimeout      time.Duration
+	host                     string
+	port                     string
+	createSlug               string
+	checkStatusSlug          string
 	checkStatusParameterName string
-	contentType string
+	contentType              string
 }
 
 func NewDnbDefaultConfiguration() DnbConfiguration {

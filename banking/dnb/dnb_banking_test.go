@@ -130,19 +130,19 @@ func TestCheckStatusInvalidUuid(t *testing.T) {
 		t.Skip("Skipping Integration Test")
 	}
 	tests := []struct {
-		name string
-		uuid string
+		name          string
+		uuid          string
 		expectedError string
 	}{
 		{
 			"Missing uuid",
 			"",
 			"invalid uuid: {\"error\":\"application_id is missing\"}",
-		},{
+		}, {
 			"invalid uuid",
 			"this-is-not-a-valid-uuid",
 			"invalid uuid: {\"error\":\"application_id is not a valid uuid\"}",
-		},{
+		}, {
 			"not existing uuid",
 			uuid.NewString(),
 			"uuid does not exist: {\"error\":\"failed to get job, the application_id doesn't exist.\"}",

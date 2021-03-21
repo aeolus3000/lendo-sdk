@@ -12,20 +12,19 @@ import (
 const (
 	// When reconnecting to the server after connection failure
 	reconnectDelay = 5 * time.Second
-
 )
 
 var (
-	ErrDisconnected             = errors.New("disconnected from rabbitmq, trying to reconnect")
+	ErrDisconnected = errors.New("disconnected from rabbitmq, trying to reconnect")
 )
 
 type RabbitMqConfiguration struct {
-	User string
-	Password string
-	Host string
-	Port string
+	User        string
+	Password    string
+	Host        string
+	Port        string
 	ContentType string
-	QueueName string
+	QueueName   string
 	resendDelay time.Duration
 }
 
@@ -50,6 +49,7 @@ func (mq *RabbitmqAbstract) initialize(c RabbitMqConfiguration, done chan os.Sig
 
 	return nil
 }
+
 // handleReconnect will wait for a connection error on
 // notifyClose, and then continuously attempt to reconnect.
 func (mq *RabbitmqAbstract) handleReconnect(c RabbitMqConfiguration) {
@@ -147,7 +147,7 @@ func (c *RabbitmqAbstract) Close() error {
 }
 
 func createAddress(c RabbitMqConfiguration) string {
-   return fmt.Sprintf("amqp://%s:%s@%s:%s", c.User, c.Password, c.Host, c.Port)
+	return fmt.Sprintf("amqp://%s:%s@%s:%s", c.User, c.Password, c.Host, c.Port)
 }
 
 func consumerName(i int) string {

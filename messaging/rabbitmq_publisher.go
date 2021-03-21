@@ -56,15 +56,14 @@ func (mq *rabbitmqPublisher) UnsafePush(buffer bytes.Buffer) error {
 		return ErrDisconnected
 	}
 	return mq.channel.Publish(
-		"",      // Exchange
+		"",                         // Exchange
 		mq.configuration.QueueName, // Routing key
-		false,   // Mandatory
-		false,   // Immediate
+		false,                      // Mandatory
+		false,                      // Immediate
 		amqp.Publishing{
 			DeliveryMode: amqp.Persistent,
-			ContentType: "text/plain",
-			Body:        buffer.Bytes(),
+			ContentType:  "text/plain",
+			Body:         buffer.Bytes(),
 		},
 	)
 }
-

@@ -75,9 +75,9 @@ func (d Dnb) createEndpoint() string {
 
 func translateToDnbCreateRequest(application banking.Application) DnbApplicationsRequest {
 	return DnbApplicationsRequest{
-		Id:            application.Id,
-		FirstName:     application.Firstname,
-		LastName:      application.Lastname,
+		Id:        application.Id,
+		FirstName: application.Firstname,
+		LastName:  application.Lastname,
 	}
 }
 
@@ -157,4 +157,3 @@ func ConvertToJobsResponse(jsonBytes []byte, response *DnbJobsResponse) error {
 	}
 	return nil
 }
-
