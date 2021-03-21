@@ -24,7 +24,7 @@ var (
 		Port:        "5672",
 		ContentType: "text/plain",
 		QueueName:   "myqueue",
-		resendDelay: 1 * time.Second,
+		ResendDelay: 1 * time.Second,
 	}
 )
 

@@ -19,13 +19,13 @@ var (
 )
 
 type RabbitMqConfiguration struct {
-	User        string
-	Password    string
-	Host        string
-	Port        string
-	ContentType string
-	QueueName   string
-	resendDelay time.Duration
+	User        string        `default:"guest"`
+	Password    string        `default:"guest"`
+	Host        string        `required:"true"`
+	Port        string        `default:"5672"`
+	ContentType string        `default:"foobar"`
+	QueueName   string        `default:"foobar"`
+	ResendDelay time.Duration `default:"1s"`
 }
 
 type RabbitmqAbstract struct {

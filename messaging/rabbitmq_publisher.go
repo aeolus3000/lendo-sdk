@@ -42,7 +42,7 @@ func (mq *rabbitmqPublisher) Publish(buffer bytes.Buffer) error {
 			if confirm.Ack {
 				return nil
 			}
-		case <-time.After(mq.configuration.resendDelay):
+		case <-time.After(mq.configuration.ResendDelay):
 		}
 	}
 }
