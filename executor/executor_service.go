@@ -2,7 +2,7 @@ package executor
 
 import (
 	"fmt"
-	"lendo-sdk/utility"
+	"github.com/aeolus3000/lendo-sdk/utility"
 	"log"
 	"sync"
 	"time"
@@ -35,7 +35,7 @@ func (es *ExecutorService) shutdown() {
 	es.wg.Wait()
 }
 
-func (es *ExecutorService) queueJob(job Job) bool {
+func (es *ExecutorService) QueueJob(job Job) bool {
 	select {
 	case es.jobChan <- job:
 		return true
