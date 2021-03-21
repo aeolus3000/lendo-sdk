@@ -76,16 +76,16 @@ func (d Dnb) createEndpoint() string {
 func translateToDnbCreateRequest(application banking.Application) DnbApplicationsRequest {
 	return DnbApplicationsRequest{
 		Id:        application.Id,
-		FirstName: application.Firstname,
-		LastName:  application.Lastname,
+		FirstName: application.FirstName,
+		LastName:  application.LastName,
 	}
 }
 
 func translateFromDnbCreateResponse(application *DnbApplicationsResponse) banking.Application {
 	return banking.Application{
 		Id:        application.Id,
-		Firstname: application.FirstName,
-		Lastname:  application.LastName,
+		FirstName: application.FirstName,
+		LastName:  application.LastName,
 		Status:    application.Status,
 	}
 }
