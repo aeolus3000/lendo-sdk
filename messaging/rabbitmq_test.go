@@ -3,34 +3,91 @@ package messaging
 import (
 	"bytes"
 	"log"
+	"os"
+	"os/signal"
+	"sync/atomic"
+
+	"syscall"
 	"testing"
 	"time"
 )
 
-func TestRabbitMq(t *testing.T) {
-	config := RabbitMqConfiguration{
+var (
+	testPubSub = TestPubSub{}
+	config = RabbitMqConfiguration{
 		User:        "guest",
 		Password:    "guest",
 		Host:        "localhost",
 		Port:        "5672",
 		ContentType: "text/plain",
 		QueueName:   "myqueue",
+		resendDelay: 1 * time.Second,
 	}
-	
-	publisher, _ := NewRabbitMqPublisher(config)
-	subscriber, _ := NewRabbitMqSubscriber(config)
+)
 
-	msgs, _ := subscriber.Consume()
+type TestPubSub struct {
+	pub Publisher
+	sub Subscriber
+}
 
+func TestMain(m *testing.M) {
+	setup()
+	code := m.Run()
+	shutdown()
+	os.Exit(code)
+}
+
+func setup() {
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+
+	publisher, _ := NewRabbitMqPublisher(config, sigs)
+	subscriber, _ := NewRabbitMqSubscriber(config, sigs)
+
+	testPubSub = TestPubSub{
+		pub: publisher,
+		sub: subscriber,
+	}
+
+}
+
+func shutdown() {
+	testPubSub.pub.Close()
+	testPubSub.sub.Close()
+}
+
+func TestRabbitMq(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Skipping integration test in short mode")
+	}
+	//Given expected string
+	expectedString := "Hallo Welt"
+	//When publishing expected string
 	buffer := bytes.Buffer{}
-	buffer.Write([]byte("Hallo Welt"))
-	_ = publisher.Publish(buffer)
-
+	buffer.Write([]byte(expectedString))
+	for {
+		err := testPubSub.pub.Publish(buffer)
+		if err == nil {
+			break
+		}
+	}
+	//And subscribing on the same channel
+	msgs, _ := testPubSub.sub.Consume()
+	//And an atomic counter
+	var ops uint64 = 1
+	//then
 	go func() {
 		for d := range msgs {
 			log.Printf("Received a message: %s", d.Body.String())
 			log.Printf("Done")
+			if d.Body.String() != expectedString {
+				t.Errorf("Got: %s; Want: %s", d.Body.String(), expectedString)
+			}
+			if ops != 1 {
+				t.Errorf("The subscriber received unexpectedly more than one message")
+			}
 			_ = d.Acknowledge()
+			atomic.AddUint64(&ops, 1)
 		}
 	}()
 

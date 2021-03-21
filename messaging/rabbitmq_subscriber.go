@@ -4,34 +4,42 @@ import (
 	"bytes"
 	"github.com/hashicorp/go-multierror"
 	"github.com/streadway/amqp"
+	"os"
+	"time"
 )
 
 type rabbitmqSubscriber struct {
 	RabbitmqAbstract
 }
 
-func NewRabbitMqSubscriber(c RabbitMqConfiguration) (Subscriber, error) {
+func NewRabbitMqSubscriber(c RabbitMqConfiguration, done chan os.Signal) (Subscriber, error) {
 	subscriber := rabbitmqSubscriber{}
-	errInit := subscriber.initialize(c)
+	errInit := subscriber.initialize(c, done)
 	if errInit != nil {
 		return nil, errInit
-	}
-	errQos := subscriber.channel.Qos(
-		1,     // prefetch count
-		0,     // prefetch size
-		false, // global
-	)
-	if errQos != nil {
-		return nil, multierror.Append(errQos, subscriber.shutdown())
 	}
 	return &subscriber, nil
 }
 
 func (mq *rabbitmqSubscriber) Consume() (<-chan Message, error) {
+	for {
+		if mq.isConnected {
+			break
+		}
+		time.Sleep(1 * time.Second)
+	}
+	errQos := mq.channel.Qos(
+		1,     // prefetch count
+		0,     // prefetch size
+		false, // global
+	)
+	if errQos != nil {
+		return nil, multierror.Append(errQos, mq.Close())
+	}
 	sourceMsgs, err := mq.channel.Consume(
 		mq.configuration.QueueName, // queue
-		"",     // consumer
-		mq.AutoAck,  // auto-ack
+		consumerName(1),     // consumer
+		false,  // auto-ack
 		false,  // exclusive
 		false,  // no-local
 		false,  // no-wait
