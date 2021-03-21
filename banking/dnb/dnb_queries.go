@@ -102,7 +102,7 @@ func readApplicationsResponse(response *http.Response) (*DnbApplicationsResponse
 	defer response.Body.Close()
 	body, err := io.ReadAll(response.Body)
 	if err != nil {
-		println("cant read response body")
+		return nil, fmt.Errorf("cant read response body; %v", err)
 	}
 	switch response.StatusCode {
 	case 201:
@@ -122,7 +122,7 @@ func readJobsResponse(response *http.Response) (*DnbJobsResponse, error) {
 	defer response.Body.Close()
 	body, err := io.ReadAll(response.Body)
 	if err != nil {
-		println("cant read response body")
+		return nil, fmt.Errorf("cant read response body; %v", err)
 	}
 	switch response.StatusCode {
 	case 200:
