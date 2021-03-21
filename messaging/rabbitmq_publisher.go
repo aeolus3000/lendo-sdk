@@ -12,7 +12,7 @@ type rabbitmqPublisher struct {
 	RabbitmqAbstract
 }
 
-func NewRabbitMqPublisher(c RabbitMqConfiguration, done chan os.Signal) (Publisher, error) {
+func NewRabbitMqPublisher(c RabbitMqConfiguration, done <-chan os.Signal) (Publisher, error) {
 	publisher := rabbitmqPublisher{}
 	err := publisher.initialize(c, done)
 	if err != nil {

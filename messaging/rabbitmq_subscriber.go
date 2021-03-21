@@ -12,7 +12,7 @@ type rabbitmqSubscriber struct {
 	RabbitmqAbstract
 }
 
-func NewRabbitMqSubscriber(c RabbitMqConfiguration, done chan os.Signal) (Subscriber, error) {
+func NewRabbitMqSubscriber(c RabbitMqConfiguration, done <-chan os.Signal) (Subscriber, error) {
 	subscriber := rabbitmqSubscriber{}
 	errInit := subscriber.initialize(c, done)
 	if errInit != nil {

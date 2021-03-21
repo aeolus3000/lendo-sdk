@@ -31,7 +31,7 @@ type RabbitMqConfiguration struct {
 type RabbitmqAbstract struct {
 	connection    *amqp.Connection
 	channel       *amqp.Channel
-	done          chan os.Signal
+	done          <-chan os.Signal
 	notifyClose   chan *amqp.Error
 	notifyConfirm chan amqp.Confirmation
 	isConnected   bool
@@ -39,7 +39,7 @@ type RabbitmqAbstract struct {
 	configuration RabbitMqConfiguration
 }
 
-func (mq *RabbitmqAbstract) initialize(c RabbitMqConfiguration, done chan os.Signal) error {
+func (mq *RabbitmqAbstract) initialize(c RabbitMqConfiguration, done <-chan os.Signal) error {
 
 	mq.configuration = c
 	mq.alive = true
