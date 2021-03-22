@@ -20,24 +20,24 @@ type Dnb struct {
 func NewDnbBanking(configuration banking.Configuration) banking.BankingApi {
 	var netTransport = &http.Transport{
 		DialContext: (&net.Dialer{
-			Timeout: configuration.tcpConnectTimeout,
+			Timeout: configuration.TcpConnectTimeout,
 		}).DialContext,
-		TLSHandshakeTimeout: configuration.tlsHandshakeTimeout,
+		TLSHandshakeTimeout: configuration.TlsHandshakeTimeout,
 	}
 	var netClient = &http.Client{
-		Timeout:   configuration.requestTimeout,
+		Timeout:   configuration.RequestTimeout,
 		Transport: netTransport,
 	}
 	return Dnb{netClient, configuration}
 }
 
-func (d Dnb) Create(application banking.Application) (banking.Application, error) {
+func (d Dnb) Create(application *banking.Application) (banking.Application, error) {
 	request := translateToDnbCreateRequest(application)
 	json, err := utility.MarshalToJson(&request)
 	if err != nil {
 		return banking.Application{}, err
 	}
-	response, err := d.client.Post(d.createUrl(), d.config.contentType, bytes.NewBuffer(json))
+	response, err := d.client.Post(d.createUrl(), d.config.ContentType, bytes.NewBuffer(json))
 	if err != nil {
 		return banking.Application{}, err
 	}
@@ -61,19 +61,19 @@ func (d Dnb) CheckStatus(applicationId string) (banking.Application, error) {
 }
 
 func (d Dnb) createUrl() string {
-	return fmt.Sprintf("%s/%s", d.createEndpoint(), d.config.createSlug)
+	return fmt.Sprintf("%s/%s", d.createEndpoint(), d.config.CreateSlug)
 }
 
 func (d Dnb) checkStatusUrl(applicationId string) string {
 	return fmt.Sprintf("%s/%s?%s=%s", d.createEndpoint(),
-		d.config.checkStatusSlug, d.config.checkStatusParameterName, applicationId)
+		d.config.CheckStatusSlug, d.config.CheckStatusParameterName, applicationId)
 }
 
 func (d Dnb) createEndpoint() string {
-	return fmt.Sprintf("http://%s:%s", d.config.host, d.config.port)
+	return fmt.Sprintf("http://%s:%s", d.config.Host, d.config.Port)
 }
 
-func translateToDnbCreateRequest(application banking.Application) DnbApplicationsRequest {
+func translateToDnbCreateRequest(application *banking.Application) DnbApplicationsRequest {
 	return DnbApplicationsRequest{
 		Id:        application.Id,
 		FirstName: application.FirstName,

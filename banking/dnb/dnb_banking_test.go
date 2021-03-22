@@ -17,7 +17,7 @@ const (
 )
 
 var (
-	dnb banking.BankingApi
+	dnbApi banking.BankingApi
 )
 
 func TestMain(m *testing.M) {
@@ -28,7 +28,7 @@ func TestMain(m *testing.M) {
 }
 
 func setup() {
-	dnb = NewDnbBanking(banking.NewDnbDefaultConfiguration())
+	dnbApi = NewDnbBanking(NewDnbDefaultConfiguration())
 }
 
 func shutdown() {
@@ -45,7 +45,7 @@ func TestCreateApplicationValid(t *testing.T) {
 		FirstName: "Simon",
 		LastName:  "Kopp",
 	}
-	applicationStatus, err := dnb.Create(application)
+	applicationStatus, err := dnbApi.Create(&application)
 	if err != nil {
 		t.Errorf("Unexpected error creating application: %v", err)
 	}
@@ -67,7 +67,7 @@ func TestCreateApplicationInValidUuid(t *testing.T) {
 		FirstName: "Simon",
 		LastName:  "Kopp",
 	}
-	_, err := dnb.Create(application)
+	_, err := dnbApi.Create(&application)
 	if err == nil {
 		t.Errorf("Expected error when creating an application with an invalid uuid")
 	}
@@ -86,9 +86,9 @@ func TestCreateApplicationDuplicateUuid(t *testing.T) {
 		FirstName: "Simon",
 		LastName:  "Kopp",
 	}
-	_, _ = dnb.Create(application)
+	_, _ = dnbApi.Create(&application)
 	// create a second time to see duplicate error
-	_, err := dnb.Create(application)
+	_, err := dnbApi.Create(&application)
 	if err == nil {
 		t.Errorf("Expected error when creating an application with a duplicate uuid")
 	}
@@ -107,9 +107,9 @@ func TestCheckStatusValidUuid(t *testing.T) {
 		FirstName: "Simon",
 		LastName:  "Kopp",
 	}
-	_, _ = dnb.Create(application)
+	_, _ = dnbApi.Create(&application)
 	time.Sleep(maxProcessingTime)
-	applicationStatus, err := dnb.CheckStatus(application.Id)
+	applicationStatus, err := dnbApi.CheckStatus(application.Id)
 	if err != nil {
 		t.Errorf("Checking the status failed unexpectedly: %v", err)
 	}
@@ -150,7 +150,7 @@ func TestCheckStatusInvalidUuid(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			_, err := dnb.CheckStatus(tt.uuid)
+			_, err := dnbApi.CheckStatus(tt.uuid)
 			if err == nil {
 				t.Errorf("Expected error when requesting check status with an invalid uuid")
 			}
