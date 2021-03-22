@@ -21,7 +21,7 @@ func NewRabbitMqSubscriber(c RabbitMqConfiguration, done <-chan os.Signal) (Subs
 	return &subscriber, nil
 }
 
-func (mq *rabbitmqSubscriber) Consume() (<-chan Message, error) {
+func (mq *rabbitmqSubscriber) Consume() (<-chan *Message, error) {
 	for {
 		if mq.isConnected {
 			break
@@ -29,7 +29,7 @@ func (mq *rabbitmqSubscriber) Consume() (<-chan Message, error) {
 		time.Sleep(1 * time.Second)
 	}
 	errQos := mq.channel.Qos(
-		1,     // prefetch count
+		mq.configuration.PrefetchCount,     // prefetch count
 		0,     // prefetch size
 		false, // global
 	)
@@ -48,12 +48,12 @@ func (mq *rabbitmqSubscriber) Consume() (<-chan Message, error) {
 	if err != nil {
 		return nil, err
 	}
-	destinationMsgs := make(chan Message, cap(sourceMsgs))
+	destinationMsgs := make(chan *Message, cap(sourceMsgs))
 	go forwardMessages(sourceMsgs, destinationMsgs)
 	return destinationMsgs, nil
 }
 
-func forwardMessages(source <-chan amqp.Delivery, destination chan Message) {
+func forwardMessages(source <-chan amqp.Delivery, destination chan *Message) {
 	defer close(destination)
 	for d := range source {
 		buffer := bytes.Buffer{}
@@ -69,7 +69,7 @@ func forwardMessages(source <-chan amqp.Delivery, destination chan Message) {
 			NotAcknowledge: notAcknowledgeMessage(d),
 			Reject:         rejectMessage(d),
 		}
-		destination <- message
+		destination <- &message
 	}
 }
 

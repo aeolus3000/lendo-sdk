@@ -19,13 +19,14 @@ var (
 )
 
 type RabbitMqConfiguration struct {
-	User        string        `default:"guest"`
-	Password    string        `default:"guest"`
-	Host        string        `required:"true"`
-	Port        string        `default:"5672"`
-	ContentType string        `default:"foobar"`
-	QueueName   string        `default:"foobar"`
-	ResendDelay time.Duration `default:"1s"`
+	User          string        `default:"guest"`
+	Password      string        `default:"guest"`
+	Host          string        `required:"true"`
+	Port          string        `default:"5672"`
+	ContentType   string        `default:"application/protobuf"`
+	QueueName     string        `required:"true"`
+	ResendDelay   time.Duration `default:"1s"`
+	PrefetchCount int           `default:"1000"`
 }
 
 type RabbitmqAbstract struct {

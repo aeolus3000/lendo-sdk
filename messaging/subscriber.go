@@ -1,6 +1,6 @@
 package messaging
 
 type Subscriber interface {
-	Consume() (<-chan Message, error)
+	Consume() (<-chan *Message, error)
 	Close() error
 }
