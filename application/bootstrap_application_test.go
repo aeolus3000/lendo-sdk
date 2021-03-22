@@ -1,7 +1,7 @@
 package application
 
 import (
-	"lendo-sdk/configuration"
+	"github.com/aeolus3000/lendo-sdk/configuration"
 	"os"
 	"testing"
 )

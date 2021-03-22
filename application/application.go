@@ -1,6 +1,6 @@
 package application
 
-import "lendo-sdk/configuration"
+import "github.com/aeolus3000/lendo-sdk/configuration"
 
 type Application interface {
 	Initialize(configuration configuration.Configuration)
