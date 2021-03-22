@@ -106,6 +106,6 @@ func scheduleJobs(es *ExecutorService, counter *Counter, jobs uint64, jobDuratio
 			WaitTime: jobDuration,
 			Counter:  counter,
 		}
-		es.queueJob(&tj)
+		es.QueueJob(&tj)
 	}
 }
