@@ -3,6 +3,6 @@ package messaging
 import "bytes"
 
 type Publisher interface {
-	Publish(buffer bytes.Buffer) error
+	Publish(buffer *bytes.Buffer) error
 	Close() error
 }

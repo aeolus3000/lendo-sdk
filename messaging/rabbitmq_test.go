@@ -5,6 +5,10 @@ package messaging
 
 import (
 	"bytes"
+	"fmt"
+	"github.com/aeolus3000/lendo-sdk/banking"
+	"github.com/google/uuid"
+	"google.golang.org/protobuf/proto"
 	"log"
 	"os"
 	"os/signal"
@@ -61,6 +65,32 @@ func shutdown() {
 	testPubSub.sub.Close()
 }
 
+func TestPolling(t *testing.T) {
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+
+	config2     := RabbitMqConfiguration{
+		User:        "guest",
+		Password:    "guest",
+		Host:        "localhost",
+		Port:        "5672",
+		ContentType: "text/plain",
+		QueueName:   "topolling",
+		ResendDelay: 1 * time.Second,
+	}
+	publisher, _ := NewRabbitMqPublisher(config2, sigs)
+	time.Sleep(2 * time.Second)
+	application := banking.Application{
+		Id:        uuid.NewString(),
+	}
+	bytesApplication, _ := proto.Marshal(&application)
+	bytesApplication2 := bytes.NewBuffer(bytesApplication)
+	err := publisher.Publish(bytesApplication2)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+}
+
 func TestRabbitMq(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping integration test in short mode")
@@ -70,7 +100,7 @@ func TestRabbitMq(t *testing.T) {
 	//When publishing expected string
 	buffer := bytes.Buffer{}
 	buffer.Write([]byte(expectedString))
-	err := testPubSub.pub.Publish(buffer)
+	err := testPubSub.pub.Publish(&buffer)
 	if err != nil {
 		t.Errorf("Could not publish to rabbitmq; error: %v", err)
 	}

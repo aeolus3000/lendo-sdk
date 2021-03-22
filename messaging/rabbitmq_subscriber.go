@@ -64,7 +64,7 @@ func forwardMessages(source <-chan amqp.Delivery, destination chan *Message) {
 			continue
 		}
 		message := Message{
-			Body:           buffer,
+			Body:           &buffer,
 			Acknowledge:    acknowledgeMessage(d),
 			NotAcknowledge: notAcknowledgeMessage(d),
 			Reject:         rejectMessage(d),
