@@ -31,31 +31,31 @@ func NewDnbBanking(configuration banking.Configuration) banking.BankingApi {
 	return Dnb{netClient, configuration}
 }
 
-func (d Dnb) Create(application *banking.Application) (banking.Application, error) {
+func (d Dnb) Create(application *banking.Application) (*banking.Application, error) {
 	request := translateToDnbCreateRequest(application)
 	json, err := utility.MarshalToJson(&request)
 	if err != nil {
-		return banking.Application{}, err
+		return nil, err
 	}
 	response, err := d.client.Post(d.createUrl(), d.config.ContentType, bytes.NewBuffer(json))
 	if err != nil {
-		return banking.Application{}, err
+		return nil, err
 	}
 	applicationResponse, err := readApplicationsResponse(response)
 	if err != nil {
-		return banking.Application{}, err
+		return nil, err
 	}
 	return translateFromDnbCreateResponse(applicationResponse), nil
 }
 
-func (d Dnb) CheckStatus(applicationId string) (banking.Application, error) {
+func (d Dnb) CheckStatus(applicationId string) (*banking.Application, error) {
 	response, err := d.client.Get(d.checkStatusUrl(applicationId))
 	if err != nil {
-		return banking.Application{}, err
+		return nil, err
 	}
 	jobsResponse, err := readJobsResponse(response)
 	if err != nil {
-		return banking.Application{}, err
+		return nil, err
 	}
 	return translateFromDnbCheckStatusResponse(jobsResponse), nil
 }
@@ -81,8 +81,8 @@ func translateToDnbCreateRequest(application *banking.Application) DnbApplicatio
 	}
 }
 
-func translateFromDnbCreateResponse(application *DnbApplicationsResponse) banking.Application {
-	return banking.Application{
+func translateFromDnbCreateResponse(application *DnbApplicationsResponse) *banking.Application {
+	return &banking.Application{
 		Id:        application.Id,
 		FirstName: application.FirstName,
 		LastName:  application.LastName,
@@ -90,8 +90,8 @@ func translateFromDnbCreateResponse(application *DnbApplicationsResponse) bankin
 	}
 }
 
-func translateFromDnbCheckStatusResponse(jobsResponse *DnbJobsResponse) banking.Application {
-	return banking.Application{
+func translateFromDnbCheckStatusResponse(jobsResponse *DnbJobsResponse) *banking.Application {
+	return &banking.Application{
 		Id:     jobsResponse.ApplicationId,
 		Status: jobsResponse.Status,
 		JobId:  jobsResponse.Id,
