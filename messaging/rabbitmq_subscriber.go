@@ -29,9 +29,9 @@ func (mq *rabbitmqSubscriber) Consume() (<-chan *Message, error) {
 		time.Sleep(1 * time.Second)
 	}
 	errQos := mq.channel.Qos(
-		mq.configuration.PrefetchCount,     // prefetch count
-		0,     // prefetch size
-		false, // global
+		mq.configuration.PrefetchCount, // prefetch count
+		0,                              // prefetch size
+		false,                          // global
 	)
 	if errQos != nil {
 		return nil, multierror.Append(errQos, mq.Close())

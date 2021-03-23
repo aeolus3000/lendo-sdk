@@ -7,10 +7,6 @@ package messaging
 
 import (
 	"bytes"
-	"fmt"
-	"github.com/aeolus3000/lendo-sdk/banking"
-	"github.com/google/uuid"
-	"google.golang.org/protobuf/proto"
 	"log"
 	"os"
 	"os/signal"

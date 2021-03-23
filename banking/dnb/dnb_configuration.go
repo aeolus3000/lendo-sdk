@@ -18,4 +18,3 @@ func NewDnbDefaultConfiguration() banking.Configuration {
 		ContentType:              "application/json",
 	}
 }
-
