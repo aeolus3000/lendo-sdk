@@ -1,3 +1,5 @@
+// +build integration_test
+
 package dnb
 
 //These tests need the following container running:
@@ -36,9 +38,6 @@ func shutdown() {
 }
 
 func TestCreateApplicationValid(t *testing.T) {
-	if testing.Short() {
-		t.Skip("Skipping Integration Test")
-	}
 	expectedStatus := "pending"
 	application := banking.Application{
 		Id:        uuid.NewString(),
@@ -58,9 +57,6 @@ func TestCreateApplicationValid(t *testing.T) {
 }
 
 func TestCreateApplicationInValidUuid(t *testing.T) {
-	if testing.Short() {
-		t.Skip("Skipping Integration Test")
-	}
 	expectedError := "duplicate application Id: {\"error\":\"the request payload is not valid.\"}"
 	application := banking.Application{
 		Id:        "invalid-uuid",
@@ -77,9 +73,6 @@ func TestCreateApplicationInValidUuid(t *testing.T) {
 }
 
 func TestCreateApplicationDuplicateUuid(t *testing.T) {
-	if testing.Short() {
-		t.Skip("Skipping Integration Test")
-	}
 	expectedError := "duplicate application Id: {\"error\":\"the application ID is already used\"}"
 	application := banking.Application{
 		Id:        uuid.NewString(),
@@ -98,9 +91,6 @@ func TestCreateApplicationDuplicateUuid(t *testing.T) {
 }
 
 func TestCheckStatusValidUuid(t *testing.T) {
-	if testing.Short() {
-		t.Skip("Skipping Integration Test")
-	}
 	expectedStatus := "completedrejected"
 	application := banking.Application{
 		Id:        uuid.NewString(),
@@ -126,9 +116,6 @@ func TestCheckStatusValidUuid(t *testing.T) {
 }
 
 func TestCheckStatusInvalidUuid(t *testing.T) {
-	if testing.Short() {
-		t.Skip("Skipping Integration Test")
-	}
 	tests := []struct {
 		name          string
 		uuid          string

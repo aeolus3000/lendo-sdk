@@ -1,3 +1,5 @@
+// +build integration_test
+
 //This test need the following docker container running
 //run -d --hostname my-rabbit6 --name some-rabbit6 --network host rabbitmq:3.8.14-management
 
@@ -92,9 +94,6 @@ func TestPolling(t *testing.T) {
 }
 
 func TestRabbitMq(t *testing.T) {
-	if testing.Short() {
-		t.Skip("Skipping integration test in short mode")
-	}
 	//Given expected string
 	expectedString := "Hallo Welt"
 	//When publishing expected string

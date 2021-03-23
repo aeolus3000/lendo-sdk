@@ -113,7 +113,7 @@ func Test_DeserializeToApplication(t *testing.T) {
 			if (err != nil) != tt.wantErr {
 				t.Errorf("deserializeToApplication() error = %v, wantErr %v", err, tt.wantErr)
 			}
-			if err != nil && !proto.Equal(application, &Application{}) {
+			if err != nil && application != nil {
 				t.Error("deserializeToApplication() application wasn't empty in error case")
 			}
 			if err == nil && !proto.Equal(application, &expectedApplication) {
