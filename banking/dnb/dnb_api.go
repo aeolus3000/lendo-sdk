@@ -100,7 +100,7 @@ func translateFromDnbCheckStatusResponse(jobsResponse *DnbJobsResponse) *banking
 
 func readApplicationsResponse(response *http.Response) (*DnbApplicationsResponse, error) {
 	defer response.Body.Close()
-	body, err := io.ReadAll(response.Body)
+	body, err := ReadAll(response.Body)
 	if err != nil {
 		return nil, fmt.Errorf("cant read response body; %v", err)
 	}
@@ -120,7 +120,7 @@ func readApplicationsResponse(response *http.Response) (*DnbApplicationsResponse
 
 func readJobsResponse(response *http.Response) (*DnbJobsResponse, error) {
 	defer response.Body.Close()
-	body, err := io.ReadAll(response.Body)
+	body, err := ReadAll(response.Body)
 	if err != nil {
 		return nil, fmt.Errorf("cant read response body; %v", err)
 	}
@@ -156,4 +156,22 @@ func ConvertToJobsResponse(jsonBytes []byte, response *DnbJobsResponse) error {
 		return fmt.Errorf("wrong response body format: %v; body: %s", err, string(jsonBytes))
 	}
 	return nil
+}
+
+func ReadAll(r io.Reader) ([]byte, error) {
+	b := make([]byte, 0, 512)
+	for {
+		if len(b) == cap(b) {
+			// Add more capacity (let append pick how much).
+			b = append(b, 0)[:len(b)]
+		}
+		n, err := r.Read(b[len(b):cap(b)])
+		b = b[:len(b)+n]
+		if err != nil {
+			if err == io.EOF {
+				err = nil
+			}
+			return b, err
+		}
+	}
 }
