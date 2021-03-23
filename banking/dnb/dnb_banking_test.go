@@ -72,6 +72,22 @@ func TestCreateApplicationInValidUuid(t *testing.T) {
 	}
 }
 
+func TestCreateApplicationEmptyUuid(t *testing.T) {
+	expectedError := "duplicate application Id: {\"error\":\"the request payload is not valid.\"}"
+	application := banking.Application{
+		Id:        "",
+		FirstName: "Simon",
+		LastName:  "Kopp",
+	}
+	_, err := dnbApi.Create(&application)
+	if err == nil {
+		t.Errorf("Expected error when creating an application with an invalid uuid")
+	}
+	if err != nil && err.Error() != expectedError {
+		t.Errorf("Expected error message didn't equal; got: %v; want: %v", err.Error(), expectedError)
+	}
+}
+
 func TestCreateApplicationDuplicateUuid(t *testing.T) {
 	expectedError := "duplicate application Id: {\"error\":\"the application ID is already used\"}"
 	application := banking.Application{

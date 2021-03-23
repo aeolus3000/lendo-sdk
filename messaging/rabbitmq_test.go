@@ -67,32 +67,6 @@ func shutdown() {
 	testPubSub.sub.Close()
 }
 
-func TestPolling(t *testing.T) {
-	sigs := make(chan os.Signal, 1)
-	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
-
-	config2     := RabbitMqConfiguration{
-		User:        "guest",
-		Password:    "guest",
-		Host:        "localhost",
-		Port:        "5672",
-		ContentType: "text/plain",
-		QueueName:   "topolling",
-		ResendDelay: 1 * time.Second,
-	}
-	publisher, _ := NewRabbitMqPublisher(config2, sigs)
-	time.Sleep(2 * time.Second)
-	application := banking.Application{
-		Id:        uuid.NewString(),
-	}
-	bytesApplication, _ := proto.Marshal(&application)
-	bytesApplication2 := bytes.NewBuffer(bytesApplication)
-	err := publisher.Publish(bytesApplication2)
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-}
-
 func TestRabbitMq(t *testing.T) {
 	//Given expected string
 	expectedString := "Hallo Welt"
