@@ -1,7 +1,7 @@
 The banking tests need the following container running:
-docker run -p 8000:8000 lendoab/interview-service:stable
+docker run -p 8000:8000 -d lendoab/interview-service:stable
 
-This rabbitmq tests need the following docker container running
+The rabbitmq tests need the following docker container running
 docker run -d --hostname my-rabbit6 --name some-rabbit6 --network host rabbitmq:3.8.14-management
 
 Rabbit MQ Management Console
